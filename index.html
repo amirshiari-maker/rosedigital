@@ -787,6 +787,12 @@ if(!reduce) loop(); else ctx.clearRect(0,0,W,H);
 /* ---------- loader ---------- */
 addEventListener('load',()=>setTimeout(()=>$('#loader').classList.add('hide'),650));
 setTimeout(()=>$('#loader').classList.add('hide'),2500);
+<!-- Static product for payment verification -->
+<section style="display:none" id="static-product">
+  <h2>ویندوز ۱۱ Pro</h2>
+  <p>لایسنس دائمی - ۲۸۹,۰۰۰ تومان</p>
+  <button onclick="addToCart({id:'w11p',name:'ویندوز ۱۱ Pro',icon:'🪟',price:289000,meta:'لایسنس دائمی'})">افزودن به سبد</button>
+</section>
 </script>
 </body>
 </html>
