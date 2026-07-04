@@ -472,7 +472,7 @@ footer{border-top:1px solid var(--line);padding:3rem 0 2rem;margin-top:3rem}
   <span id="PPTrust">
     <script src="https://statics.payping.ir/trust-v3.js" theme="light" size="sm"></script>
   </span>
-</div>
+</div>setTimeout
       </div>
       <div class="fcol"><h5>محصولات</h5><a href="#products">ویندوز ۱۱</a><a href="#products">ویندوز ۱۰</a><a href="#products">آفیس ۲۰۲۱</a><a href="#products">مایکروسافت ۳۶۵</a></div>
       <div class="fcol"><h5>اشتراک‌ها</h5><a href="#subs">هوش مصنوعی</a><a href="#subs">موسیقی</a><a href="#subs">استریم</a><a href="#subs">ابزار طراحی</a></div>
@@ -686,13 +686,26 @@ $('#payBtn').onclick=()=>{
   const name=$('#ckName').value.trim(),email=$('#ckEmail').value.trim();
   if(!name||!email){toast('لطفاً نام و ایمیل را کامل کنید');return}
   const btn=$('#payBtn');btn.textContent='در حال انتقال به درگاه...';btn.disabled=true;
-  setTimeout(()=>{
-    const token=Math.random().toString(36).slice(2,10).toUpperCase();
-    $('#dlLink').textContent='https://dl.rosedigital.ir/order/'+token;
-    closeModal(checkoutModal); openModal(successModal);
-    btn.textContent='پرداخت'; btn.disabled=false;
-    cart=[]; renderCart();
-  },1400);
+  const total = cartTotal();
+  const items = cart.map(i=>i.name).join(', ');
+  fetch('https://api.payping.ir/v2/pay',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer FD1286AB9D9B195F5B55F2DAED2E2D0CC0CCD723EE2E59D12D8708D7F39D848D-1'},
+    body:JSON.stringify({
+      amount: Math.round(total/10),
+      returnUrl:'https://rosedigital.ir',
+      description:'خرید از رز دیجیتال: '+items,
+      payerName: name,
+      payerEmail: email,
+      clientRefId: Date.now().toString()
+    })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.code){ window.location.href='https://api.payping.ir/v2/pay/gotoipg/'+d.code; }
+    else{ toast('خطا در اتصال به درگاه');btn.textContent='پرداخت';btn.disabled=false; }
+  })
+  .catch(()=>{ toast('خطا در اتصال');btn.textContent='پرداخت';btn.disabled=false; });
 };
 $('#copyLink').onclick=()=>{navigator.clipboard?.writeText($('#dlLink').textContent);$('#copyLink').textContent='کپی شد ✓';setTimeout(()=>$('#copyLink').textContent='کپی',1600)};
 $('#doneBtn').onclick=()=>closeModal(successModal);
