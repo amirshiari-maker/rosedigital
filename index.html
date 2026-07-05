@@ -172,7 +172,7 @@ section{padding:5rem 0;position:relative}
 .priceline .price{font-size:1.5rem;font-weight:900}
 .priceline .unit{font-size:.8rem;color:var(--muted)}
 .priceline .old{font-size:.85rem;color:var(--muted);text-decoration:line-through}
-.card .add{width:100%;transform:translateZ(20px)}
+.card .add{width:100%;transform:translateZ(20px);position:relative;z-index:10;pointer-events:auto}
 
 /* duration toggle */
 .toggle{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.25rem;gap:.25rem;margin-bottom:1.8rem}
@@ -462,22 +462,18 @@ footer{border-top:1px solid var(--line);padding:3rem 0 2rem;margin-top:3rem}
     <div class="fgrid">
       <div>
         <div class="brand"><img id="footLogo" alt="رز دیجیتال" /><b><span class="b1">Rose</span> <span class="b2">Digital</span></b></div>
-        <p>فروشگاه تخصصی لایسنس‌های اورجینال مایکروسافت و اشتراک سرویس‌های جهانی با تحویل آنی.</p>
-        <div style="display:flex;align-items:center;gap:12px;margin-top:.6rem">
-  <div class="namad">
+        <p>فروشگاه تخصصی اشتراک‌های دیجیتال و سرویس‌های جهانی با تحویل آنی.</p>
+        <div class="namad" style="margin-top:.6rem">
+  
     <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=752823&Code=1RUvypp2IQDWPyTLEVvRtAXpK0eiLlYW'>
       <img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=752823&Code=1RUvypp2IQDWPyTLEVvRtAXpK0eiLlYW' alt='' style='cursor:pointer' code='1RUvypp2IQDWPyTLEVvRtAXpK0eiLlYW'>
     </a>
   </div>
-  <span id="PPTrust" >
-    <script src="https://statics.payping.ir/trust-v3.js"
-        theme="dark"
-        size="md" ></script>
-</span>
+  
 </div>
       </div>
-      <div class="fcol"><h5>محصولات</h5><a href="#products">ویندوز ۱۱</a><a href="#products">ویندوز ۱۰</a><a href="#products">آفیس ۲۰۲۱</a><a href="#products">مایکروسافت ۳۶۵</a></div>
-      <div class="fcol"><h5>اشتراک‌ها</h5><a href="#subs">هوش مصنوعی</a><a href="#subs">موسیقی</a><a href="#subs">استریم</a><a href="#subs">ابزار طراحی</a></div>
+      <div class="fcol"><h5>محصولات</h5><a href="#products">Canva Pro</a><a href="#products">ChatGPT Plus</a><a href="#products">Netflix Premium</a><a href="#products">Spotify Premium</a><a href="#products">YouTube Premium</a></div>
+      
       <div class="fcol"><h5>پشتیبانی</h5><a href="#how">روش خرید</a><a href="#contact">تماس با ما</a><a href="#news">مجله</a><a href="#top">قوانین و گارانتی</a></div>
     </div>
     <div class="fbottom">
@@ -645,6 +641,7 @@ $('#cartBtn').onclick=openCart; $('#closeCart').onclick=closeCart; overlay.oncli
 function addToCart(item){
   cart.push({...item, uid:Date.now()+Math.random()});
   renderCart(); pulseCount(); toast(item.name+' به سبد اضافه شد');
+  openCart();
 }
 function removeItem(uid){cart=cart.filter(i=>i.uid!==uid);renderCart()}
 function cartTotal(){return cart.reduce((s,i)=>s+i.price,0)}
