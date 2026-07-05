@@ -368,7 +368,7 @@ footer{border-top:1px solid var(--line);padding:3rem 0 2rem;margin-top:3rem}
   <div class="wrap">
     <div class="grid">
       <div class="tcard reveal"><div class="ic">⚡</div><div><b>تحویل آنی</b><span>کلید و لینک، چند دقیقه‌ای</span></div></div>
-      <div class="tcard reveal"><div class="ic">🛡️</div><div><b>۱۰۰٪ اورجینال</b><span>فعال‌سازی رسمی مایکروسافت</span></div></div>
+      <div class="tcard reveal"><div class="ic">🛡️</div><div><b>۱۰۰٪ اورجینال</b><span>اکانت اورجینال ۱۰۰٪ معتبر</span></div></div>
       <div class="tcard reveal"><div class="ic">💳</div><div><b>پرداخت امن</b><span>درگاه بانکی معتبر</span></div></div>
       <div class="tcard reveal"><div class="ic">🎧</div><div><b>پشتیبانی واقعی</b><span>راهنمایی تا نصب نهایی</span></div></div>
     </div>
@@ -378,7 +378,7 @@ footer{border-top:1px solid var(--line);padding:3rem 0 2rem;margin-top:3rem}
 <section id="products">
   <div class="wrap">
     <div class="shead reveal">
-      <span class="eyebrow"><span class="dot"></span>محصولات مایکروسافت</span>
+      <span class="eyebrow"><span class="dot"></span>اشتراک‌های دیجیتال</span>
       <h2>ویندوز و آفیس <span class="grad-text">اورجینال</span></h2>
       <p>لایسنس‌های دائمی با فعال‌سازی رسمی. پس از خرید، کلید محصول و لینک دانلود نسخه رسمی را دریافت می‌کنید.</p>
     </div>
@@ -534,22 +534,14 @@ const $ = s => document.querySelector(s);
 
 /* ---------- data (پیش‌فرض؛ پنل مدیریت می‌تواند بازنویسی کند) ---------- */
 const DEFAULT_PRODUCTS = [
-  {id:'w11p', icon:'🪟', name:'ویندوز ۱۱ Pro', badge:'پرفروش', price:289000, old:420000, desc:'نسخه حرفه‌ای با امکانات کامل برای کاربران پیشرفته و کسب‌وکار.', feats:['لایسنس دائمی و اورجینال','فعال‌سازی رسمی مایکروسافت','مناسب نصب جدید و ارتقا']},
-  {id:'w11h', icon:'🪟', name:'ویندوز ۱۱ Home', price:219000, old:320000, desc:'انتخاب ایده‌آل برای کاربران خانگی و استفاده روزمره.', feats:['لایسنس دائمی','آپدیت رسمی','پشتیبانی نصب']},
-  {id:'w10p', icon:'💻', name:'ویندوز ۱۰ Pro', price:199000, old:290000, desc:'پایدار و سبک، مناسب سیستم‌های قدیمی‌تر و سازمانی.', feats:['لایسنس دائمی','Remote Desktop','BitLocker']},
-  {id:'of21', icon:'📊', name:'آفیس ۲۰۲۱ Pro Plus', badge:'محبوب', price:259000, old:380000, desc:'ورد، اکسل، پاورپوینت و اوت‌لوک، یک‌بار خرید برای همیشه.', feats:['نصب دائمی روی یک سیستم','بدون اشتراک ماهانه','همه برنامه‌های آفیس']},
-  {id:'m365', icon:'☁️', name:'مایکروسافت ۳۶۵', price:149000, unit:'/ سالانه', desc:'آفیس همیشه به‌روز به همراه ۱ ترابایت فضای OneDrive.', feats:['نصب روی چند دستگاه','۱TB فضای ابری','آپدیت دائمی']},
-  {id:'wsrv', icon:'🖥️', name:'Windows Server', price:690000, desc:'لایسنس سرور برای محیط‌های حرفه‌ای و میزبانی.', feats:['نسخه Standard','فعال‌سازی رسمی','مناسب دیتاسنتر']},
+  {id:'canva', icon:'assets/canva-pro.png', name:'Canva Pro', badge:'محبوب', price:1500000, old:2500000, desc:'دسترسی کامل به ابزارهای طراحی حرفه‌ای با تمام امکانات پرمیوم.', feats:['اکانت اورجینال و معتبر','دسترسی کامل به امکانات Pro','تحویل آنی']},
+  {id:'chatgpt', icon:'assets/chatgpt.png', name:'ChatGPT Plus', badge:'پرفروش', price:2000000, old:3500000, desc:'دسترسی به GPT-4 و امکانات پیشرفته هوش مصنوعی بدون محدودیت.', feats:['GPT-4 بدون محدودیت','تولید تصویر DALL-E','تحویل آنی']},
+  {id:'netflix', icon:'assets/netflix.png', name:'Netflix Premium', price:1200000, old:2000000, desc:'اشتراک نتفلیکس با کیفیت Ultra HD و امکان استفاده همزمان.', feats:['کیفیت Ultra HD','چند صفحه همزمان','تحویل آنی']},
+  {id:'spotify', icon:'assets/spotify.png', name:'Spotify Premium', price:800000, old:1500000, desc:'موسیقی بی‌محدود بدون تبلیغات با کیفیت صدای بالا.', feats:['بدون تبلیغات','دانلود آفلاین','کیفیت صدای بالا']},
+  {id:'youtube', icon:'assets/youtube-premium8.png', name:'YouTube Premium', price:900000, old:1600000, desc:'تماشای ویدیو بدون تبلیغات و دانلود آفلاین از یوتیوب.', feats:['بدون تبلیغات','دانلود آفلاین','YouTube Music رایگان']},
 ];
 
-const DEFAULT_SUBS = [
-  {id:'gpt', icon:'🤖', name:'ChatGPT Plus', base:380000, desc:'دسترسی به مدل‌های پیشرفته هوش مصنوعی.'},
-  {id:'spo', icon:'🎵', name:'Spotify Premium', base:95000, desc:'موسیقی بدون تبلیغ و دانلود آفلاین.'},
-  {id:'net', icon:'🎬', name:'Netflix Premium', base:165000, desc:'استریم فیلم و سریال با کیفیت ۴K.'},
-  {id:'ado', icon:'🎨', name:'Adobe Creative', base:520000, desc:'مجموعه کامل ابزار طراحی و ویرایش.'},
-  {id:'yt', icon:'▶️', name:'YouTube Premium', base:110000, desc:'یوتیوب بدون تبلیغ و پخش در پس‌زمینه.'},
-  {id:'cld', icon:'✨', name:'Claude Pro', base:360000, desc:'دستیار هوشمند برای کار و نوشتن.'},
-];
+const DEFAULT_SUBS = [];
 
 const DEFAULT_NEWS = [
   {cat:'ویندوز', icon:'🪟', title:'آپدیت بزرگ ویندوز ۱۱ با قابلیت‌های هوش مصنوعی منتشر شد', excerpt:'مایکروسافت در جدیدترین به‌روزرسانی، ابزارهای مبتنی بر هوش مصنوعی را به‌صورت پیش‌فرض فعال کرد.', date:'۲ روز پیش', read:'۳ دقیقه'},
@@ -585,13 +577,13 @@ products.forEach(p=>{
   el.className='card reveal';
   el.innerHTML = `
     ${p.badge?`<span class="badge">${p.badge}</span>`:''}
-    <div class="logo-box">${p.icon}</div>
+    <div class="logo-box"><img src="${p.icon}" alt="${p.name}" style="width:64px;height:64px;object-fit:contain;border-radius:12px"></div>
     <h3>${p.name}</h3>
     <p class="desc">${p.desc}</p>
     <ul>${p.feats.map(f=>`<li>${f}</li>`).join('')}</ul>
     <div class="priceline"><span class="price grad-text">${fa(p.price)}</span><span class="unit">تومان ${p.unit||''}</span>${p.old?`<span class="old">${fa(p.old)}</span>`:''}</div>
     <button class="btn btn-primary add">افزودن به سبد</button>`;
-  el.querySelector('.add').onclick = ()=>addToCart({id:p.id,name:p.name,icon:p.icon,price:p.price,meta:'لایسنس دائمی'});
+  el.querySelector('.add').onclick = ()=>addToCart({id:p.id,name:p.name,icon:p.icon,price:p.price,meta:'اشتراک دیجیتال'});
   pg.appendChild(el);
   io.observe(el);
 });
@@ -664,7 +656,7 @@ function renderCart(){
   box.innerHTML='';
   cart.forEach(i=>{
     const el=document.createElement('div');el.className='ci';
-    el.innerHTML=`<div class="ico">${i.icon}</div><div class="info"><b>${i.name}</b><span>${i.meta}</span><div class="p">${money(i.price)}</div></div><button class="rm">✕</button>`;
+    el.innerHTML=`<div class="ico">${i.icon.startsWith('assets/') ? '<img src="'+i.icon+'" style="width:36px;height:36px;object-fit:contain;border-radius:8px">' : i.icon}</div><div class="info"><b>${i.name}</b><span>${i.meta}</span><div class="p">${money(i.price)}</div></div><button class="rm">✕</button>`;
     el.querySelector('.rm').onclick=()=>removeItem(i.uid);
     box.appendChild(el);
   });
@@ -684,28 +676,40 @@ successModal.onclick=e=>{if(e.target===successModal)closeModal(successModal)};
 
 $('#payBtn').onclick=()=>{
   const name=$('#ckName').value.trim(),email=$('#ckEmail').value.trim();
-  if(!name||!email){toast('لطفاً نام و ایمیل را کامل کنید');return}
-  const btn=$('#payBtn');btn.textContent='در حال انتقال به درگاه...';btn.disabled=true;
-  const total = cartTotal();
-  const items = cart.map(i=>i.name).join(', ');
+  if(!name||!email){toast('لطفاً نام و ایمیل را کامل کنید');return;}
+  if(!cart.length){toast('سبد خرید خالی است');return;}
+  const btn=$('#payBtn');
+  btn.textContent='در حال انتقال به درگاه...';btn.disabled=true;
+  const total=cartTotal();
+  const items=cart.map(i=>i.name).join(', ');
   fetch('https://api.payping.ir/v2/pay',{
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer FD1286AB9D9B195F5B55F2DAED2E2D0CC0CCD723EE2E59D12D8708D7F39D848D-1'},
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer FD1286AB9D9B195F5B55F2DAED2E2D0CC0CCD723EE2E59D12D8708D7F39D848D-1'
+    },
     body:JSON.stringify({
-      amount: Math.round(total/10),
+      amount:Math.round(total/10),
       returnUrl:'https://rosedigital.ir',
-      description:'خرید از رز دیجیتال: '+items,
-      payerName: name,
-      payerEmail: email,
-      clientRefId: Date.now().toString()
+      description:'خرید اشتراک دیجیتال: '+items,
+      payerName:name,
+      payerEmail:email,
+      clientRefId:Date.now().toString()
     })
   })
   .then(r=>r.json())
   .then(d=>{
-    if(d.code){ window.location.href='https://api.payping.ir/v2/pay/gotoipg/'+d.code; }
-    else{ toast('خطا در اتصال به درگاه');btn.textContent='پرداخت';btn.disabled=false; }
+    if(d&&d.code){
+      window.location.href='https://api.payping.ir/v2/pay/gotoipg/'+d.code;
+    } else {
+      toast('خطا در اتصال به درگاه');
+      btn.textContent='پرداخت';btn.disabled=false;
+    }
   })
-  .catch(()=>{ toast('خطا در اتصال');btn.textContent='پرداخت';btn.disabled=false; });
+  .catch(()=>{
+    toast('خطا در اتصال به سرور');
+    btn.textContent='پرداخت';btn.disabled=false;
+  });
 };
 $('#copyLink').onclick=()=>{navigator.clipboard?.writeText($('#dlLink').textContent);$('#copyLink').textContent='کپی شد ✓';setTimeout(()=>$('#copyLink').textContent='کپی',1600)};
 $('#doneBtn').onclick=()=>closeModal(successModal);
