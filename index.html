@@ -28,7 +28,95 @@
   --glow-blue:0 0 0 1px rgba(37,99,235,.4),0 18px 50px -12px rgba(37,99,235,.5);
   --radius:20px;
   --maxw:1200px;
+  --gold:#c9a84c;
+  --gold-light:#f0d080;
+  --gold-grad:linear-gradient(135deg,#c9a84c 0%,#f0d080 50%,#c9a84c 100%);
+  --gold-glow:0 0 0 1px rgba(201,168,76,.4),0 18px 50px -12px rgba(201,168,76,.55);
+  --cream:#faf6ef;
 }
+
+/* ===== FotoPanel Section ===== */
+/* panel vars (light theme) */
+.fp-panel-wrap{
+  width:100%;max-width:480px;border-radius:16px;overflow:hidden;
+  background:#F8F6F2;
+  box-shadow:0 40px 80px -20px rgba(201,168,76,.35),0 0 0 1px rgba(201,168,76,.2);
+  animation:floaty 6s ease-in-out infinite;
+  font-size:13px;
+}
+@keyframes floaty{0%,100%{transform:translateY(0) rotateX(5deg) rotateY(-9deg)}50%{transform:translateY(-14px) rotateX(5deg) rotateY(-9deg)}}
+#fotopanel{padding:5rem 0;position:relative;overflow:hidden}
+#fotopanel::before{content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(900px 500px at 20% 50%,rgba(201,168,76,.12),transparent 60%),
+             radial-gradient(600px 400px at 80% 20%,rgba(201,168,76,.08),transparent 60%);}
+#fotopanel .wrap{position:relative;z-index:1}
+.fp-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center}
+@media(max-width:768px){.fp-grid{grid-template-columns:1fr}}
+.fp-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:700;letter-spacing:.04em;
+  color:var(--gold);padding:.4rem .85rem;border-radius:999px;
+  border:1px solid rgba(201,168,76,.35);background:rgba(201,168,76,.08);margin-bottom:1rem}
+.fp-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.fp-title{font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.18;letter-spacing:-.01em;margin-bottom:1rem}
+.fp-title .g{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fp-lead{color:var(--muted);font-size:1.05rem;max-width:38ch;line-height:1.8;margin-bottom:2rem}
+.fp-features{display:grid;gap:.75rem;margin-bottom:2rem}
+.fp-feat{display:flex;align-items:flex-start;gap:.85rem;padding:.9rem 1.1rem;border-radius:14px;
+  background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.18);transition:.2s}
+.fp-feat:hover{background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.35)}
+.fp-feat .fi{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:1.2rem;flex-shrink:0;
+  background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3)}
+.fp-feat .ft{display:grid}
+.fp-feat .ft b{font-size:.95rem;font-weight:700;color:var(--text)}
+.fp-feat .ft span{font-size:.82rem;color:var(--muted);margin-top:.15rem}
+.fp-cta{display:flex;gap:.9rem;flex-wrap:wrap;align-items:center}
+.btn-gold{background:var(--gold-grad);color:#1a1200;font-weight:800;box-shadow:var(--gold-glow)}
+.btn-gold:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn-gold-ghost{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.35);font-weight:700}
+.btn-gold-ghost:hover{background:rgba(201,168,76,.18);border-color:var(--gold)}
+/* Panel mockup */
+.fp-mockup{position:relative;display:grid;place-items:center;perspective:1400px}
+.fp-panel{
+  width:100%;max-width:480px;border-radius:20px;
+  background:linear-gradient(145deg,rgba(30,24,12,.92),rgba(20,16,8,.96));
+  border:1px solid rgba(201,168,76,.3);
+  box-shadow:0 40px 80px -30px rgba(201,168,76,.4),0 0 0 1px rgba(255,255,255,.03) inset;
+  overflow:hidden;animation:floaty 6s ease-in-out infinite;
+}
+.fp-panel .p-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.75rem 1.1rem;background:rgba(201,168,76,.1);
+  border-bottom:1px solid rgba(201,168,76,.2);
+}
+.fp-panel .p-header .p-logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:.95rem;color:var(--gold)}
+.fp-panel .p-header .p-logo span{font-size:1.1rem}
+.fp-panel .p-header .p-date{font-size:.75rem;color:var(--muted)}
+.fp-panel .p-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;padding:.8rem}
+.fp-panel .p-stat{padding:.7rem .85rem;border-radius:12px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.15)}
+.fp-panel .p-stat .psl{font-size:.72rem;color:var(--muted);margin-bottom:.2rem}
+.fp-panel .p-stat .psv{font-size:1.35rem;font-weight:900;color:var(--gold)}
+.fp-panel .p-stat .pss{font-size:.7rem;color:var(--muted)}
+.fp-panel .p-table-head{display:grid;grid-template-columns:2fr 1fr 1fr;padding:.5rem .8rem;
+  font-size:.72rem;color:var(--muted);border-bottom:1px solid rgba(201,168,76,.1)}
+.fp-panel .p-row{display:grid;grid-template-columns:2fr 1fr 1fr;padding:.55rem .8rem;
+  font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.04);align-items:center}
+.fp-panel .p-row:last-child{border-bottom:none}
+.fp-panel .p-badge{display:inline-block;padding:.2rem .55rem;border-radius:999px;font-size:.68rem;font-weight:700}
+.fp-panel .p-badge.done{background:rgba(34,197,94,.15);color:#4ade80}
+.fp-panel .p-badge.pending{background:rgba(201,168,76,.15);color:var(--gold)}
+.fp-panel .p-btn{
+  margin:.8rem;border-radius:10px;padding:.7rem;text-align:center;font-weight:800;font-size:.88rem;
+  background:var(--gold-grad);color:#1a1200;cursor:pointer;
+}
+.fp-price-box{
+  display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.4rem;
+  border-radius:16px;border:1px solid rgba(201,168,76,.35);
+  background:rgba(201,168,76,.07);margin-bottom:1.5rem
+}
+.fp-price-box .amount{font-size:2rem;font-weight:900;background:var(--gold-grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.fp-price-box .meta{display:grid;gap:.1rem}
+.fp-price-box .meta b{font-size:.9rem;font-weight:700}
+.fp-price-box .meta span{font-size:.8rem;color:var(--muted)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
@@ -309,6 +397,7 @@ footer{border-top:1px solid var(--line);padding:3rem 0 2rem;margin-top:3rem}
     <nav>
       <a href="#products">محصولات</a>
       <a href="#subs">اشتراک اپ‌ها</a>
+      <a href="#fotopanel" style="color:var(--gold);font-weight:700">📸 فتوپنل</a>
       <a href="#how">روش خرید</a>
       <a href="#news">اخبار فناوری</a>
       <a href="#contact">تماس</a>
@@ -399,6 +488,185 @@ footer{border-top:1px solid var(--line);padding:3rem 0 2rem;margin-top:3rem}
       <button data-dur="12">۱۲ ماهه</button>
     </div>
     <div class="cards" id="subGrid"></div>
+  </div>
+</section>
+
+<section id="fotopanel">
+  <div class="wrap">
+    <div class="fp-grid">
+
+      <!-- چپ: متن -->
+      <div class="fp-left reveal">
+        <div class="fp-eyebrow"><span class="dot"></span>نرم‌افزار اتوماسیون عکاسی</div>
+        <h2 class="fp-title">فتوپنل — مدیریت <span class="g">هوشمند</span> آتلیه عکاسی</h2>
+        <p class="fp-lead">از قرارداد تا فاکتور، از تقویم تا گزارش مالی — همه‌چیز در یک پنل حرفه‌ای فارسی.</p>
+
+        <div class="fp-features">
+          <div class="fp-feat reveal">
+            <div class="fi" style="background:#FFF8E7">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A07830" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </div>
+            <div class="ft"><b>داشبورد مرکزی</b><span>نمای کلی آتلیه — آمار، قراردادها و رویدادهای پیش‌رو</span></div>
+          </div>
+          <div class="fp-feat reveal">
+            <div class="fi" style="background:#FFF0F5">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4537E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/><path d="M9 13h6M9 17h4"/><path d="M16 17l1.5-1.5a1.41 1.41 0 012 2L18 19"/></svg>
+            </div>
+            <div class="ft"><b>مدیریت قراردادها</b><span>ثبت، پیگیری و بایگانی قراردادهای عروسی و مراسم</span></div>
+          </div>
+          <div class="fp-feat reveal">
+            <div class="fi" style="background:#EEF4FF">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3A80D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="8" cy="15" r="1" fill="#3A80D0"/><circle cx="12" cy="15" r="1" fill="#3A80D0"/></svg>
+            </div>
+            <div class="ft"><b>تقویم سالانه شمسی</b><span>نمای کامل رویدادها با تقویم جلالی و هشدار خودکار</span></div>
+          </div>
+          <div class="fp-feat reveal">
+            <div class="fi" style="background:#FFF8E7">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A07818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+            </div>
+            <div class="ft"><b>گزارش مالی و صندوق</b><span>فاکتور، صندوق، چک‌های دریافتی و درآمد ماهانه</span></div>
+          </div>
+          <div class="fp-feat reveal">
+            <div class="fi" style="background:#F4F0FF">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6048B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="ft"><b>مشتریان، کارمندان و پکیج‌ها</b><span>پروفایل کامل، سابقه سفارشات و مدیریت تیم</span></div>
+          </div>
+        </div>
+
+        <div class="fp-price-box reveal">
+          <div class="amount">۳٬۰۰۰٬۰۰۰</div>
+          <div class="meta">
+            <b>تومان / سالانه</b>
+            <span>لایسنس یک ساله — آپدیت رایگان در طول دوره</span>
+          </div>
+        </div>
+
+        <div class="fp-cta">
+          <button class="btn btn-gold" onclick="addFotopanelToCart()">افزودن به سبد خرید</button>
+          <a href="fotopanel.html" class="btn btn-gold-ghost">مشاهده جزئیات بیشتر ←</a>
+        </div>
+      </div>
+
+      <!-- راست: موکاپ واقعی پنل -->
+      <div class="fp-mockup reveal">
+        <div class="fp-panel-wrap">
+
+          <!-- topbar -->
+          <div style="display:flex;align-items:center;gap:8px;padding:0 14px;height:46px;background:#fff;border-bottom:1px solid rgba(0,0,0,.07)">
+            <svg width="22" height="22" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" rx="46" fill="#C9A84C"/><rect x="36" y="78" width="128" height="88" rx="14" fill="white" opacity="0.95"/><circle cx="100" cy="122" r="30" fill="#C9A84C"/><circle cx="100" cy="122" r="20" fill="white" opacity="0.3"/><circle cx="100" cy="122" r="12" fill="white" opacity="0.9"/><rect x="63" y="58" width="34" height="24" rx="7" fill="white" opacity="0.95"/><circle cx="148" cy="64" r="17" fill="none" stroke="white" stroke-width="5" opacity="0.9"/><circle cx="134" cy="64" r="17" fill="none" stroke="#F0D080" stroke-width="5" opacity="0.9"/></svg>
+            <span style="font-size:12px;font-weight:600;color:#1A1410;margin-right:auto">داشبورد</span>
+            <span style="font-size:10px;color:#A09488;display:flex;align-items:center;gap:4px">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              جمعه ۲۶ تیر ۱۴۰۵
+            </span>
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#F0D080);display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">م</div>
+          </div>
+
+          <!-- metrics -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px">
+            <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:10px 8px">
+              <div style="width:30px;height:30px;border-radius:8px;background:#FFF8E7;display:flex;align-items:center;justify-content:center;margin-bottom:6px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A07830" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              </div>
+              <div style="font-size:8.5px;color:#A09488;margin-bottom:2px">قرارداد این ماه</div>
+              <div style="font-size:18px;font-weight:700;color:#1A1410;line-height:1">۰</div>
+              <div style="font-size:8px;color:#A09488;margin-top:2px">مراسم ثبت‌شده</div>
+            </div>
+            <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:10px 8px">
+              <div style="width:30px;height:30px;border-radius:8px;background:#FFF0F5;display:flex;align-items:center;justify-content:center;margin-bottom:6px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4537E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="8" cy="15" r="1" fill="#D4537E"/><circle cx="12" cy="15" r="1" fill="#D4537E"/><circle cx="16" cy="15" r="1" fill="#D4537E"/></svg>
+              </div>
+              <div style="font-size:8.5px;color:#A09488;margin-bottom:2px">قراردادهای فعال</div>
+              <div style="font-size:18px;font-weight:700;color:#1A1410;line-height:1">۰</div>
+              <div style="font-size:8px;color:#A09488;margin-top:2px">در حال اجرا</div>
+            </div>
+            <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:10px 8px">
+              <div style="width:30px;height:30px;border-radius:8px;background:#E8F8F3;display:flex;align-items:center;justify-content:center;margin-bottom:6px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              </div>
+              <div style="font-size:8.5px;color:#A09488;margin-bottom:2px">کل مشتریان</div>
+              <div style="font-size:18px;font-weight:700;color:#1A1410;line-height:1">۰</div>
+              <div style="font-size:8px;color:#A09488;margin-top:2px">زوج ثبت‌شده</div>
+            </div>
+            <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:10px 8px">
+              <div style="width:30px;height:30px;border-radius:8px;background:#F4F0FF;display:flex;align-items:center;justify-content:center;margin-bottom:6px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div style="font-size:8.5px;color:#A09488;margin-bottom:2px">در انتظار تحویل</div>
+              <div style="font-size:18px;font-weight:700;color:#1A1410;line-height:1">۰</div>
+              <div style="font-size:8px;color:#A09488;margin-top:2px">بدون تاخیر</div>
+            </div>
+          </div>
+
+          <!-- content: table + calendar -->
+          <div style="display:grid;grid-template-columns:1fr 128px;gap:8px;padding:0 10px 10px">
+            <!-- جدول قراردادها -->
+            <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;overflow:hidden">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px 0;font-size:10px">
+                <b style="font-weight:600;color:#1A1410">آخرین قراردادها</b>
+                <span style="color:#A07830;font-size:9px">همه ←</span>
+              </div>
+              <table style="width:100%;border-collapse:collapse;font-size:9px;margin-top:6px">
+                <thead><tr>
+                  <th style="padding:5px 9px;background:#FAFAF8;color:#A09488;font-weight:500;text-align:right;border-bottom:1px solid rgba(0,0,0,.06)">عروس و داماد</th>
+                  <th style="padding:5px 9px;background:#FAFAF8;color:#A09488;font-weight:500;text-align:right;border-bottom:1px solid rgba(0,0,0,.06)">تاریخ</th>
+                  <th style="padding:5px 9px;background:#FAFAF8;color:#A09488;font-weight:500;text-align:right;border-bottom:1px solid rgba(0,0,0,.06)">وضعیت</th>
+                </tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="padding:7px 9px;border-bottom:1px solid rgba(0,0,0,.05);color:#1A1410;font-weight:500">رضایی و کریمی</td>
+                    <td style="padding:7px 9px;border-bottom:1px solid rgba(0,0,0,.05);color:#1A1410">۱۵ مرداد</td>
+                    <td style="padding:7px 9px;border-bottom:1px solid rgba(0,0,0,.05)"><span style="display:inline-block;padding:2px 6px;border-radius:20px;font-size:8.5px;font-weight:500;background:#E8F8F3;color:#1D9E75">فعال</span></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:7px 9px;border-bottom:1px solid rgba(0,0,0,.05);color:#1A1410;font-weight:500">محمدی و احمدی</td>
+                    <td style="padding:7px 9px;border-bottom:1px solid rgba(0,0,0,.05);color:#1A1410">۲۲ مرداد</td>
+                    <td style="padding:7px 9px;border-bottom:1px solid rgba(0,0,0,.05)"><span style="display:inline-block;padding:2px 6px;border-radius:20px;font-size:8.5px;font-weight:500;background:#FFF8E7;color:#A07830">پیش‌نویس</span></td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" style="padding:10px;text-align:center;color:#A09488;font-size:9px">قراردادی ثبت نشده</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="margin:8px 10px;border-radius:7px;padding:7px;text-align:center;font-weight:700;font-size:9px;background:linear-gradient(135deg,#C9A84C,#F0D080);color:#1a1200">+ قرارداد جدید</div>
+            </div>
+
+            <!-- تقویم -->
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:9px">
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:9px;font-weight:600;color:#1A1410;margin-bottom:6px">
+                  <span>تیر ۱۴۰۵</span><span style="font-size:8px;color:#A09488">سالانه ←</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px">
+                  <div style="font-size:7px;color:#A09488;text-align:center">ش</div><div style="font-size:7px;color:#A09488;text-align:center">ی</div><div style="font-size:7px;color:#A09488;text-align:center">د</div><div style="font-size:7px;color:#A09488;text-align:center">س</div><div style="font-size:7px;color:#A09488;text-align:center">چ</div><div style="font-size:7px;color:#A09488;text-align:center">پ</div><div style="font-size:7px;color:#A09488;text-align:center">ج</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;color:#6B6055"></div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۳</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۴</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۵</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۶</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۷</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۸</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۹</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۰</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۱</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۲</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۳</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۴</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۵</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۶</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۷</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۸</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۹</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۰</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۱</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۲</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۳</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۴</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۵</div><div style="font-size:8px;text-align:center;padding:2px;border-radius:3px;background:linear-gradient(135deg,#C9A84C,#F0D080);color:#fff;font-weight:700">۲۶</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۷</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۸</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۹</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۳۰</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۳۱</div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:9px">
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:9px;font-weight:600;color:#1A1410;margin-bottom:6px">
+                  <span>مرداد ۱۴۰۵</span><span style="font-size:8px;color:#A09488">ماه آینده</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px">
+                  <div style="font-size:7px;color:#A09488;text-align:center">ش</div><div style="font-size:7px;color:#A09488;text-align:center">ی</div><div style="font-size:7px;color:#A09488;text-align:center">د</div><div style="font-size:7px;color:#A09488;text-align:center">س</div><div style="font-size:7px;color:#A09488;text-align:center">چ</div><div style="font-size:7px;color:#A09488;text-align:center">پ</div><div style="font-size:7px;color:#A09488;text-align:center">ج</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۳</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۴</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۵</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۶</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۷</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۸</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۹</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۰</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۱</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۲</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۳</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۴</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;border-radius:3px;background:#E8F8F3;color:#1D9E75;font-weight:600">۱۵</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۶</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۷</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۸</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۱۹</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۰</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۱</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;border-radius:3px;background:#E8F8F3;color:#1D9E75;font-weight:600">۲۲</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۳</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۴</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۵</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۶</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۷</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۸</div>
+                  <div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۲۹</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۳۰</div><div style="font-size:8px;text-align:center;padding:2px;color:#6B6055">۳۱</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /fp-panel-wrap -->
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -717,6 +985,11 @@ $('#doneBtn').onclick=()=>closeModal(successModal);
 
 /* ---------- newsletter ---------- */
 $('#subBtn').onclick=()=>{const v=$('#newsEmail').value.trim();if(!v||!v.includes('@')){toast('ایمیل معتبر وارد کنید');return}$('#newsEmail').value='';toast('عضویت شما ثبت شد 🎉')};
+
+/* ---------- fotopanel cart ---------- */
+function addFotopanelToCart(){
+  addToCart({id:'fotopanel',name:'فتوپنل — لایسنس سالانه',icon:'📸',price:3000000,meta:'نرم‌افزار اتوماسیون عکاسی'});
+}
 
 /* ---------- toast ---------- */
 let tt;

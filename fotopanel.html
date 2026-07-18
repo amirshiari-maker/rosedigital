@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>فتوپنل — نرم‌افزار مدیریت آتلیه عکاسی | رز دیجیتال</title>
+<meta name="description" content="فتوپنل — نرم‌افزار حرفه‌ای مدیریت آتلیه عکاسی. قراردادها، مشتریان، تقویم شمسی، فاکتور و گزارش مالی." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#07060f;
+  --panel:rgba(22,18,42,.55);
+  --panel-2:rgba(30,24,56,.65);
+  --line:rgba(160,140,220,.16);
+  --rose:#ec1e79;
+  --blue:#2563eb;
+  --cyan:#4da6ff;
+  --text:#ece8f7;
+  --muted:#9b93ba;
+  --grad:linear-gradient(115deg,#ec1e79 0%,#b62caf 45%,#2563eb 100%);
+  --gold:#c9a84c;
+  --gold-l:#f0d080;
+  --gold-grad:linear-gradient(135deg,#c9a84c 0%,#f0d080 50%,#c9a84c 100%);
+  --gold-glow:0 0 0 1px rgba(201,168,76,.4),0 18px 50px -12px rgba(201,168,76,.5);
+  --radius:20px;
+  --maxw:1160px;
+  /* panel colors (light theme) */
+  --pg:#F8F6F2;
+  --ps:#FFFFFF;
+  --pb:rgba(0,0,0,.07);
+  --pt:#1A1410;
+  --pm:#6B6055;
+  --pmuted:#A09488;
+  --pgold:#C9A84C;
+  --pgold-d:#A07830;
+  --pgold-l:#FFF8E7;
+  --prose:#D4537E;
+  --prose-l:#FFF0F5;
+  --pteal:#1D9E75;
+  --pteal-l:#E8F8F3;
+  --ppurple:#7F77DD;
+  --ppurple-l:#F4F0FF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Vazirmatn',system-ui,sans-serif;background:var(--ink);color:var(--text);
+  line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-3;
+  background:radial-gradient(900px 600px at 80% -5%,rgba(201,168,76,.13),transparent 60%),
+    radial-gradient(700px 500px at 0% 30%,rgba(37,99,235,.1),transparent 60%),
+    radial-gradient(600px 400px at 50% 110%,rgba(201,168,76,.08),transparent 60%),var(--ink)}
+canvas#fx{position:fixed;inset:0;z-index:-2;opacity:.7}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(var(--maxw),92vw);margin-inline:auto}
+
+/* Loader */
+#loader{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:var(--ink);transition:opacity .6s,visibility .6s}
+#loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+#loader .lwrap{display:grid;place-items:center;gap:1.2rem}
+#loader svg{animation:pulse 1.6s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(201,168,76,.5))}
+#loader .lbar{width:140px;height:4px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+#loader .lbar i{display:block;height:100%;width:40%;background:var(--gold-grad);border-radius:999px;animation:slide 1.1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.08);opacity:1}}
+@keyframes slide{0%{transform:translateX(-120%)}100%{transform:translateX(360%)}}
+
+/* Nav */
+header{position:sticky;top:0;z-index:90}
+.nav{display:flex;align-items:center;gap:1rem;justify-content:space-between;
+  margin-top:14px;padding:.6rem .8rem .6rem 1rem;border-radius:18px;
+  background:rgba(12,10,28,.6);backdrop-filter:blur(18px);border:1px solid rgba(201,168,76,.15)}
+.brand{display:flex;align-items:center;gap:.7rem;font-weight:800}
+.brand svg{filter:drop-shadow(0 4px 14px rgba(201,168,76,.45))}
+.brand b{font-size:1.1rem}.brand .b1{color:var(--gold)}.brand .b2{color:var(--cyan)}
+.nav-back{display:flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:10px;
+  color:var(--muted);font-size:.9rem;font-weight:600;border:1px solid var(--line);
+  background:var(--panel);transition:.2s}
+.nav-back:hover{color:var(--text);border-color:rgba(201,168,76,.4)}
+.cart-btn{position:relative;display:inline-flex;align-items:center;gap:.5rem;padding:.55rem .9rem;
+  border-radius:12px;border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);
+  color:var(--text);font-family:inherit;font-weight:700;font-size:.9rem;cursor:pointer;transition:.2s}
+.cart-btn:hover{border-color:var(--gold);box-shadow:0 0 24px -6px rgba(201,168,76,.4)}
+.cart-btn .count{position:absolute;top:-8px;left:-8px;min-width:20px;height:20px;padding:0 5px;
+  border-radius:999px;background:var(--gold-grad);color:#1a1200;font-size:.72rem;font-weight:800;
+  display:grid;place-items:center;transform:scale(0);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.cart-btn .count.on{transform:scale(1)}
+
+/* Btn */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-family:inherit;
+  font-weight:700;cursor:pointer;border:none;border-radius:13px;padding:.85rem 1.6rem;
+  font-size:.98rem;transition:transform .15s,box-shadow .25s,filter .2s;white-space:nowrap}
+.btn-gold{background:var(--gold-grad);color:#1a1200;font-weight:800;box-shadow:var(--gold-glow)}
+.btn-gold:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn-ghost{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.3);font-weight:700}
+.btn-ghost:hover{background:rgba(201,168,76,.18);border-color:var(--gold)}
+.btn:active{transform:scale(.98)}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .55s,transform .55s}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* ===== HERO ===== */
+.hero{padding:5rem 0 3rem}
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center}
+@media(max-width:820px){.hero-inner{grid-template-columns:1fr}.panel-stage{display:none}}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:700;
+  color:var(--gold);padding:.4rem .85rem;border-radius:999px;
+  border:1px solid rgba(201,168,76,.35);background:rgba(201,168,76,.08);margin-bottom:1.2rem}
+.hero-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.hero h1{font-size:clamp(2rem,4.5vw,3.3rem);font-weight:900;line-height:1.18;letter-spacing:-.01em;margin-bottom:1rem}
+.hero h1 .g{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{color:var(--muted);font-size:1.05rem;max-width:40ch;margin-bottom:2rem;line-height:1.8}
+.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2.2rem}
+.hero-stats{display:flex;gap:2.2rem;flex-wrap:wrap}
+.hero-stats div b{display:block;font-size:1.4rem;font-weight:900;background:var(--gold-grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-stats div span{font-size:.82rem;color:var(--muted)}
+
+/* ===== PANEL MOCKUP (light theme, exact replica) ===== */
+.panel-stage{perspective:1400px;display:grid;place-items:center}
+.panel-wrap{
+  width:100%;max-width:480px;border-radius:16px;overflow:hidden;
+  background:var(--pg);
+  box-shadow:0 40px 80px -20px rgba(201,168,76,.35),0 0 0 1px rgba(201,168,76,.2);
+  animation:floaty 6s ease-in-out infinite;
+  font-family:'Vazirmatn',sans-serif;
+}
+@keyframes floaty{0%,100%{transform:translateY(0) rotateX(5deg) rotateY(-9deg)}50%{transform:translateY(-14px) rotateX(5deg) rotateY(-9deg)}}
+
+/* topbar */
+.pw-top{display:flex;align-items:center;gap:10px;padding:0 16px;height:50px;
+  background:var(--ps);border-bottom:1px solid var(--pb)}
+.pw-top .pw-title{font-size:13px;font-weight:600;color:var(--pt);margin-right:auto}
+.pw-top .pw-date{font-size:11px;color:var(--pmuted);display:flex;align-items:center;gap:5px}
+.pw-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pgold),var(--gold-l));
+  display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff}
+
+/* metrics */
+.pw-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px}
+.pw-metric{background:var(--ps);border:1px solid var(--pb);border-radius:10px;padding:12px 10px}
+.pw-metric .pm-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;margin-bottom:7px}
+.pm-gold{background:var(--pgold-l);color:var(--pgold-d)}
+.pm-rose{background:var(--prose-l);color:var(--prose)}
+.pm-teal{background:var(--pteal-l);color:var(--pteal)}
+.pm-purple{background:var(--ppurple-l);color:var(--ppurple)}
+.pw-metric .pm-lbl{font-size:9px;color:var(--pmuted);margin-bottom:2px}
+.pw-metric .pm-val{font-size:19px;font-weight:700;color:var(--pt);line-height:1}
+.pw-metric .pm-sub{font-size:9px;color:var(--pmuted);margin-top:3px}
+
+/* content grid */
+.pw-grid{display:grid;grid-template-columns:1fr 140px;gap:10px;padding:0 12px 12px}
+
+/* card */
+.pw-card{background:var(--ps);border:1px solid var(--pb);border-radius:10px;overflow:hidden}
+.pw-card-head{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px 0;font-size:11px}
+.pw-card-head b{font-weight:600;color:var(--pt)}
+.pw-card-head a{color:var(--pgold-d);font-size:10px}
+
+/* table inside panel */
+.pw-table{width:100%;border-collapse:collapse;font-size:10px;margin-top:8px}
+.pw-table thead th{padding:6px 10px;background:#FAFAF8;color:var(--pmuted);font-weight:500;
+  text-align:right;border-bottom:1px solid var(--pb)}
+.pw-table tbody td{padding:8px 10px;border-bottom:1px solid var(--pb);color:var(--pt);vertical-align:middle}
+.pw-table tbody tr:last-child td{border-bottom:none}
+.pw-pill{display:inline-block;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:500}
+.pp-teal{background:var(--pteal-l);color:var(--pteal)}
+.pp-gold{background:var(--pgold-l);color:var(--pgold-d)}
+
+/* mini calendar */
+.pw-cal{background:var(--ps);border:1px solid var(--pb);border-radius:10px;padding:10px}
+.pw-cal-head{display:flex;justify-content:space-between;align-items:center;
+  font-size:10px;font-weight:600;color:var(--pt);margin-bottom:8px}
+.pw-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.pw-cal-dn{font-size:8px;color:var(--pmuted);text-align:center;padding:2px 0}
+.pw-cal-d{font-size:9px;text-align:center;padding:3px 2px;border-radius:4px;color:var(--pm)}
+.pw-cal-d.today{background:linear-gradient(135deg,var(--pgold),var(--gold-l));color:#fff;font-weight:700}
+.pw-cal-d.ev{background:var(--pteal-l);color:var(--pteal);font-weight:600}
+
+/* new contract btn */
+.pw-newbtn{margin:10px 12px;border-radius:8px;padding:8px;text-align:center;
+  font-weight:700;font-size:10px;background:linear-gradient(135deg,var(--pgold),var(--gold-l));
+  color:#1a1200;cursor:pointer}
+
+/* ===== FEATURES ===== */
+#features{padding:4.5rem 0}
+.shead{margin-bottom:2.5rem}
+.shead .eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:700;
+  color:var(--gold);padding:.4rem .85rem;border-radius:999px;
+  border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);margin-bottom:.8rem}
+.shead .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.shead h2{font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:900;line-height:1.25;margin-bottom:.5rem}
+.shead h2 .g{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.shead p{color:var(--muted);font-size:1rem}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
+.feat-card{padding:1.5rem;border-radius:var(--radius);background:var(--panel);
+  border:1px solid var(--line);transition:border-color .3s,box-shadow .3s;position:relative;overflow:hidden}
+.feat-card::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(300px circle at 0% 0%,rgba(201,168,76,.07),transparent 60%);opacity:0;transition:.3s}
+.feat-card:hover{border-color:rgba(201,168,76,.4);box-shadow:0 20px 50px -20px rgba(201,168,76,.3)}
+.feat-card:hover::before{opacity:1}
+.feat-ic{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;
+  margin-bottom:1rem;flex-shrink:0}
+.feat-card h3{font-size:1.05rem;font-weight:800;margin-bottom:.5rem}
+.feat-card p{font-size:.88rem;color:var(--muted);line-height:1.7}
+.feat-card ul{list-style:none;margin-top:.8rem;display:grid;gap:.35rem}
+.feat-card ul li{font-size:.83rem;color:#cfc8e6;display:flex;gap:.5rem;align-items:flex-start}
+.feat-card ul li::before{content:"✓";color:var(--gold);font-weight:800;flex-shrink:0;margin-top:.1rem}
+
+/* sidebar nav items for features */
+.sbi-demo{width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;
+  justify-content:center;flex-shrink:0}
+
+/* ===== PRICING ===== */
+#pricing{padding:4.5rem 0}
+.price-card{max-width:560px;margin:0 auto;padding:2.5rem;border-radius:24px;
+  background:linear-gradient(145deg,rgba(28,22,10,.92),rgba(18,14,6,.96));
+  border:1px solid rgba(201,168,76,.4);box-shadow:0 40px 80px -30px rgba(201,168,76,.35);
+  position:relative;overflow:hidden;text-align:center}
+.price-card::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(600px circle at 50% 0%,rgba(201,168,76,.1),transparent 60%);pointer-events:none}
+.price-card .plabel{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:700;
+  color:var(--gold);padding:.35rem .8rem;border-radius:999px;
+  border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);margin-bottom:1.5rem}
+.price-card .amount{font-size:3.5rem;font-weight:900;background:var(--gold-grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.1}
+.price-card .unit{font-size:1rem;color:var(--muted);margin-bottom:.3rem}
+.price-card .period{font-size:.88rem;color:var(--muted);margin-bottom:2rem}
+.price-feats{display:grid;gap:.7rem;margin-bottom:2rem;text-align:right}
+.price-feat{display:flex;align-items:center;gap:.7rem;font-size:.92rem;padding:.6rem .8rem;
+  border-radius:10px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.12)}
+.price-feat::before{content:"✓";color:var(--gold);font-weight:800;font-size:1rem}
+
+/* ===== STEPS ===== */
+#how{padding:4.5rem 0}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+@media(max-width:600px){.steps{grid-template-columns:1fr}}
+.step{padding:1.6rem;border-radius:var(--radius);border:1px solid var(--line);background:var(--panel)}
+.step .n{font-size:2.4rem;font-weight:900;background:var(--gold-grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.step h4{margin:.6rem 0 .4rem;font-size:1.05rem;font-weight:700}
+.step p{color:var(--muted);font-size:.88rem}
+
+/* ===== BOTTOM CTA ===== */
+.bottom-cta{padding:4rem 0}
+.bigcta{border-radius:24px;padding:3rem 2rem;text-align:center;
+  background:linear-gradient(145deg,rgba(28,22,10,.8),rgba(18,14,6,.9));
+  border:1px solid rgba(201,168,76,.3);box-shadow:0 30px 70px -30px rgba(201,168,76,.3);
+  position:relative;overflow:hidden}
+.bigcta::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(700px circle at 50% 0%,rgba(201,168,76,.08),transparent 60%)}
+.bigcta h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;position:relative;margin-bottom:.8rem}
+.bigcta h2 .g{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bigcta p{color:var(--muted);font-size:1.05rem;max-width:40ch;margin:0 auto 2rem;position:relative}
+.bigcta .cta-btns{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ===== CART ===== */
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:.3s}
+.overlay.on{opacity:1;visibility:visible}
+.drawer{position:fixed;left:0;top:0;bottom:0;z-index:101;width:min(380px,94vw);
+  background:rgba(14,11,28,.96);backdrop-filter:blur(24px);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.drawer.on{transform:translateX(0)}
+.dhead{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.4rem;border-bottom:1px solid var(--line)}
+.dhead h3{font-size:1.1rem;font-weight:800}
+.iconbtn{background:none;border:1px solid var(--line);border-radius:8px;width:34px;height:34px;color:var(--text);cursor:pointer;font-size:1rem;transition:.2s}
+.iconbtn:hover{border-color:var(--rose);color:var(--rose)}
+.ditems{flex:1;overflow-y:auto;padding:1rem 1.4rem;display:flex;flex-direction:column;gap:.7rem}
+.empty{color:var(--muted);font-size:.9rem;text-align:center;padding:2rem 0}
+.ci{display:flex;align-items:center;gap:.8rem;padding:.8rem;border-radius:12px;border:1px solid var(--line);background:var(--panel)}
+.ci .ico{width:42px;height:42px;border-radius:10px;background:rgba(201,168,76,.1);display:grid;place-items:center;flex-shrink:0}
+.ci .info{flex:1;min-width:0}
+.ci .info b{display:block;font-size:.88rem;font-weight:700}
+.ci .info span{font-size:.75rem;color:var(--muted)}
+.ci .info .p{font-size:.85rem;font-weight:700;color:var(--gold)}
+.ci .rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:.3rem .5rem;transition:.2s}
+.ci .rm:hover{color:var(--rose)}
+.dfoot{padding:1rem 1.4rem 1.4rem;border-top:1px solid var(--line)}
+.trow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;font-size:.95rem}
+.tt{font-size:1.1rem;font-weight:800;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ===== MODAL ===== */
+.modal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:.3s}
+.modal.on{opacity:1;visibility:visible}
+.modal .box{background:rgba(16,12,32,.97);border:1px solid var(--line);border-radius:24px;
+  padding:2rem;width:min(440px,92vw);max-height:90vh;overflow-y:auto}
+.modal .box h3{font-size:1.3rem;font-weight:800;margin-bottom:.4rem}
+.modal .box .sub{color:var(--muted);font-size:.9rem;margin-bottom:1.4rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;color:var(--muted)}
+.field input{width:100%;padding:.7rem .9rem;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;font-size:.95rem;outline:none;transition:.2s}
+.field input:focus{border-color:var(--gold);background:rgba(201,168,76,.05)}
+
+/* Toast */
+#toast{position:fixed;bottom:1.5rem;right:50%;transform:translateX(50%) translateY(8px);z-index:300;
+  padding:.65rem 1.3rem;border-radius:12px;background:rgba(20,16,40,.97);border:1px solid var(--line);
+  font-size:.88rem;font-weight:600;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1;transform:translateX(50%) translateY(0)}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:2rem 0;margin-top:1rem}
+.fbottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;font-size:.82rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="lwrap">
+    <!-- لوگوی واقعی فتوپنل -->
+    <svg width="72" height="72" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="200" height="200" rx="46" fill="#C9A84C"/>
+      <rect x="36" y="78" width="128" height="88" rx="14" fill="white" opacity="0.95"/>
+      <circle cx="100" cy="122" r="30" fill="#C9A84C"/>
+      <circle cx="100" cy="122" r="20" fill="white" opacity="0.3"/>
+      <circle cx="100" cy="122" r="12" fill="white" opacity="0.9"/>
+      <rect x="63" y="58" width="34" height="24" rx="7" fill="white" opacity="0.95"/>
+      <circle cx="148" cy="64" r="17" fill="none" stroke="white" stroke-width="5" opacity="0.9"/>
+      <circle cx="134" cy="64" r="17" fill="none" stroke="#F0D080" stroke-width="5" opacity="0.9"/>
+    </svg>
+    <div class="lbar"><i></i></div>
+  </div>
+</div>
+
+<!-- Nav -->
+<header>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" rx="46" fill="#C9A84C"/>
+          <rect x="36" y="78" width="128" height="88" rx="14" fill="white" opacity="0.95"/>
+          <circle cx="100" cy="122" r="30" fill="#C9A84C"/>
+          <circle cx="100" cy="122" r="20" fill="white" opacity="0.3"/>
+          <circle cx="100" cy="122" r="12" fill="white" opacity="0.9"/>
+          <rect x="63" y="58" width="34" height="24" rx="7" fill="white" opacity="0.95"/>
+          <circle cx="148" cy="64" r="17" fill="none" stroke="white" stroke-width="5" opacity="0.9"/>
+          <circle cx="134" cy="64" r="17" fill="none" stroke="#F0D080" stroke-width="5" opacity="0.9"/>
+        </svg>
+        <b><span class="b1">فتو</span><span class="b2">پنل</span></b>
+      </div>
+      <a href="index.html" class="nav-back">← بازگشت به فروشگاه</a>
+      <button class="cart-btn" id="cartBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/></svg>
+        سبد خرید
+        <span class="count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+
+      <!-- متن -->
+      <div class="reveal">
+        <div class="hero-badge"><span class="dot"></span>نرم‌افزار اتوماسیون عکاسی</div>
+        <h1>فتوپنل<br><span class="g">مدیریت حرفه‌ای</span><br>آتلیه عکاسی</h1>
+        <p class="lead">از قرارداد تا فاکتور، از تقویم سالانه تا گزارش مالی — همه چیز در یک پنل فارسی طراحی‌شده برای عکاسان حرفه‌ای.</p>
+        <div class="hero-cta">
+          <button class="btn btn-gold" onclick="addToCart()">خرید لایسنس — ۳٬۰۰۰٬۰۰۰ تومان</button>
+          <a href="#features" class="btn btn-ghost">مشاهده امکانات</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>۱۱+</b><span>ماژول اصلی</span></div>
+          <div><b>۱ سال</b><span>پشتیبانی رایگان</span></div>
+          <div><b>تقویم شمسی</b><span>کاملاً فارسی</span></div>
+        </div>
+      </div>
+
+      <!-- موکاپ واقعی پنل -->
+      <div class="panel-stage reveal">
+        <div class="panel-wrap">
+
+          <!-- topbar -->
+          <div class="pw-top">
+            <svg width="22" height="22" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <rect width="200" height="200" rx="46" fill="#C9A84C"/>
+              <rect x="36" y="78" width="128" height="88" rx="14" fill="white" opacity="0.95"/>
+              <circle cx="100" cy="122" r="30" fill="#C9A84C"/>
+              <circle cx="100" cy="122" r="20" fill="white" opacity="0.3"/>
+              <circle cx="100" cy="122" r="12" fill="white" opacity="0.9"/>
+              <rect x="63" y="58" width="34" height="24" rx="7" fill="white" opacity="0.95"/>
+              <circle cx="148" cy="64" r="17" fill="none" stroke="white" stroke-width="5" opacity="0.9"/>
+              <circle cx="134" cy="64" r="17" fill="none" stroke="#F0D080" stroke-width="5" opacity="0.9"/>
+            </svg>
+            <span class="pw-title">داشبورد</span>
+            <span class="pw-date">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              جمعه ۲۶ تیر ۱۴۰۵
+            </span>
+            <div class="pw-avatar">م</div>
+          </div>
+
+          <!-- metrics (4تا — دقیقاً مثل اسکرین‌شات) -->
+          <div class="pw-metrics">
+            <div class="pw-metric">
+              <div class="pm-ic pm-gold">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              </div>
+              <div class="pm-lbl">قرارداد این ماه</div>
+              <div class="pm-val">۰</div>
+              <div class="pm-sub">مراسم ثبت‌شده</div>
+            </div>
+            <div class="pw-metric">
+              <div class="pm-ic pm-rose">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="8" cy="15" r="1" fill="currentColor"/><circle cx="12" cy="15" r="1" fill="currentColor"/><circle cx="16" cy="15" r="1" fill="currentColor"/></svg>
+              </div>
+              <div class="pm-lbl">قراردادهای فعال</div>
+              <div class="pm-val">۰</div>
+              <div class="pm-sub">در حال اجرا</div>
+            </div>
+            <div class="pw-metric">
+              <div class="pm-ic pm-teal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              </div>
+              <div class="pm-lbl">کل مشتریان</div>
+              <div class="pm-val">۰</div>
+              <div class="pm-sub">زوج ثبت‌شده</div>
+            </div>
+            <div class="pw-metric">
+              <div class="pm-ic pm-purple">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="pm-lbl">در انتظار تحویل</div>
+              <div class="pm-val">۰</div>
+              <div class="pm-sub">بدون تاخیر</div>
+            </div>
+          </div>
+
+          <!-- main content grid -->
+          <div class="pw-grid">
+            <!-- آخرین قراردادها -->
+            <div class="pw-card">
+              <div class="pw-card-head">
+                <b>آخرین قراردادها</b>
+                <a href="#">همه ←</a>
+              </div>
+              <table class="pw-table">
+                <thead>
+                  <tr><th>عروس و داماد</th><th>تاریخ مراسم</th><th>پکیج</th><th>وضعیت</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:500">رضایی و کریمی</td>
+                    <td>۱۵ مرداد</td>
+                    <td><span class="pw-pill pp-gold">طلایی</span></td>
+                    <td><span class="pw-pill pp-teal">فعال</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">محمدی و احمدی</td>
+                    <td>۲۲ مرداد</td>
+                    <td><span class="pw-pill pp-gold">نقره‌ای</span></td>
+                    <td><span class="pw-pill pp-gold">پیش‌نویس</span></td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" style="text-align:center;padding:10px;color:#A09488;font-size:10px">قراردادی ثبت نشده</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="pw-newbtn">+ قرارداد جدید</div>
+            </div>
+
+            <!-- تقویم -->
+            <div>
+              <div class="pw-cal" style="margin-bottom:8px">
+                <div class="pw-cal-head">
+                  <span>تیر ۱۴۰۵</span>
+                  <span style="font-size:9px;color:#A09488">سالانه ←</span>
+                </div>
+                <div class="pw-cal-grid">
+                  <div class="pw-cal-dn">ش</div><div class="pw-cal-dn">ی</div><div class="pw-cal-dn">د</div>
+                  <div class="pw-cal-dn">س</div><div class="pw-cal-dn">چ</div><div class="pw-cal-dn">پ</div><div class="pw-cal-dn">ج</div>
+                  <div class="pw-cal-d"></div><div class="pw-cal-d">۱</div><div class="pw-cal-d">۲</div>
+                  <div class="pw-cal-d">۳</div><div class="pw-cal-d">۴</div><div class="pw-cal-d">۵</div><div class="pw-cal-d">۶</div>
+                  <div class="pw-cal-d">۷</div><div class="pw-cal-d">۸</div><div class="pw-cal-d">۹</div>
+                  <div class="pw-cal-d">۱۰</div><div class="pw-cal-d">۱۱</div><div class="pw-cal-d">۱۲</div><div class="pw-cal-d">۱۳</div>
+                  <div class="pw-cal-d">۱۴</div><div class="pw-cal-d">۱۵</div><div class="pw-cal-d">۱۶</div>
+                  <div class="pw-cal-d">۱۷</div><div class="pw-cal-d">۱۸</div><div class="pw-cal-d">۱۹</div><div class="pw-cal-d">۲۰</div>
+                  <div class="pw-cal-d">۲۱</div><div class="pw-cal-d">۲۲</div><div class="pw-cal-d">۲۳</div>
+                  <div class="pw-cal-d">۲۴</div><div class="pw-cal-d">۲۵</div><div class="pw-cal-d today">۲۶</div><div class="pw-cal-d">۲۷</div>
+                  <div class="pw-cal-d">۲۸</div><div class="pw-cal-d">۲۹</div><div class="pw-cal-d">۳۰</div>
+                  <div class="pw-cal-d">۳۱</div>
+                </div>
+              </div>
+              <div class="pw-cal">
+                <div class="pw-cal-head">
+                  <span>مرداد ۱۴۰۵</span>
+                  <span style="font-size:9px;color:#A09488">ماه آینده</span>
+                </div>
+                <div class="pw-cal-grid">
+                  <div class="pw-cal-dn">ش</div><div class="pw-cal-dn">ی</div><div class="pw-cal-dn">د</div>
+                  <div class="pw-cal-dn">س</div><div class="pw-cal-dn">چ</div><div class="pw-cal-dn">پ</div><div class="pw-cal-dn">ج</div>
+                  <div class="pw-cal-d">۱</div><div class="pw-cal-d">۲</div><div class="pw-cal-d">۳</div>
+                  <div class="pw-cal-d">۴</div><div class="pw-cal-d">۵</div><div class="pw-cal-d">۶</div><div class="pw-cal-d">۷</div>
+                  <div class="pw-cal-d">۸</div><div class="pw-cal-d">۹</div><div class="pw-cal-d">۱۰</div>
+                  <div class="pw-cal-d">۱۱</div><div class="pw-cal-d ev">۱۵</div><div class="pw-cal-d">۱۶</div><div class="pw-cal-d">۱۷</div>
+                  <div class="pw-cal-d">۱۸</div><div class="pw-cal-d">۱۹</div><div class="pw-cal-d">۲۰</div>
+                  <div class="pw-cal-d">۲۱</div><div class="pw-cal-d ev">۲۲</div><div class="pw-cal-d">۲۳</div><div class="pw-cal-d">۲۴</div>
+                  <div class="pw-cal-d">۲۵</div><div class="pw-cal-d">۲۶</div><div class="pw-cal-d">۲۷</div>
+                  <div class="pw-cal-d">۲۸</div><div class="pw-cal-d">۲۹</div><div class="pw-cal-d">۳۰</div><div class="pw-cal-d">۳۱</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /panel-wrap -->
+      </div><!-- /panel-stage -->
+
+    </div><!-- /hero-inner -->
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section id="features">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow"><span class="dot"></span>امکانات نرم‌افزار</div>
+      <h2>هر چیزی که یه آتلیه <span class="g">نیاز داره</span></h2>
+      <p>فتوپنل با تمرکز بر نیازهای واقعی عکاسان ایرانی طراحی شده.</p>
+    </div>
+    <div class="feat-grid">
+
+      <!-- داشبورد -->
+      <div class="feat-card reveal">
+        <div class="feat-ic" style="background:#FFF8E7">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A07830" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>داشبورد مرکزی</h3>
+        <p>نمای کلی آتلیه در یک نگاه — آمار قراردادها، مشتریان و رویدادهای پیش‌رو.</p>
+        <ul>
+          <li>متریک‌های لحظه‌ای قراردادها و مشتریان</li>
+          <li>آخرین قراردادها با وضعیت</li>
+          <li>تقویم این ماه و ماه بعد</li>
+        </ul>
+      </div>
+
+      <!-- قراردادها -->
+      <div class="feat-card reveal">
+        <div class="feat-ic" style="background:#FFF0F5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4537E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/><path d="M9 13h6M9 17h4"/><path d="M16 17l1.5-1.5a1.41 1.41 0 012 2L18 19"/></svg>
+        </div>
+        <h3>مدیریت قراردادها</h3>
+        <p>ثبت، پیگیری و بایگانی کامل قراردادهای مراسم عروسی و تولد.</p>
+        <ul>
+          <li>اطلاعات کامل عروس و داماد</li>
+          <li>وضعیت‌بندی: پیش‌نویس / فعال / تحویل / لغو</li>
+          <li>اتصال به پکیج و فاکتور</li>
+          <li>چاپ قرارداد</li>
+        </ul>
+      </div>
+
+      <!-- تقویم -->
+      <div class="feat-card reveal">
+        <div class="feat-ic" style="background:#EEF4FF">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A80D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="8" cy="15" r="1" fill="#4A90D9"/><circle cx="12" cy="15" r="1" fill="#4A90D9"/><circle cx="16" cy="15" r="1" fill="#4A90D9"/></svg>
+        </div>
+        <h3>تقویم سالانه شمسی</h3>
+        <p>نمای کامل رویدادها با تقویم جلالی، هماهنگ با تاریخ ایرانی.</p>
+        <ul>
+          <li>نمای ماهانه و سالانه مراسم‌ها</li>
+          <li>جلوگیری از تداخل تاریخ</li>
+          <li>سینک با تقویم دستگاه (ICS)</li>
+        </ul>
+      </div>
+
+      <!-- فاکتورها -->
+      <div class="feat-card reveal">
+        <div class="feat-ic" style="background:#EEF4FF">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2870B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        </div>
+        <h3>فاکتورها</h3>
+        <p>صدور فاکتور حرفه‌ای برای هر قرارداد با قابلیت چاپ.</p>
+        <ul>
+          <li>فاکتور خودکار از روی قرارداد</li>
+          <li>مدیریت پرداخت‌ها و مانده</li>
+          <li>چاپ فاکتور رسمی</li>
+        </ul>
+      </div>
+
+      <!-- مالی -->
+      <div class="feat-card reveal">
+        <div class="feat-ic" style="background:#FFF8E7">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A07818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+        </div>
+        <h3>گزارش مالی و صندوق</h3>
+        <p>کنترل کامل جریان مالی آتلیه — صندوق، چک، گزارش.</p>
+        <ul>
+          <li>مدیریت صندوق و موجودی</li>
+          <li>پیگیری چک‌های دریافتی</li>
+          <li>گزارش درآمد ماهانه و سالانه</li>
+          <li>طرف حساب و بدهکار</li>
+        </ul>
+      </div>
+
+      <!-- مشتریان و کارمندان -->
+      <div class="feat-card reveal">
+        <div class="feat-ic" style="background:#F4F0FF">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6048B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>مشتریان و کارمندان</h3>
+        <p>پروفایل کامل مشتریان و مدیریت تیم آتلیه در یک جا.</p>
+        <ul>
+          <li>پروفایل و سابقه سفارشات مشتری</li>
+          <li>مدیریت عکاسان و کارمندان</li>
+          <li>تخصیص مراسم به هر عکاس</li>
+          <li>پکیج‌بندی خدمات</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="shead reveal" style="text-align:center;max-width:100%;margin-bottom:2.5rem">
+      <div class="eyebrow" style="justify-content:center"><span class="dot"></span>قیمت‌گذاری</div>
+      <h2>یه پلن ساده و <span class="g">شفاف</span></h2>
+      <p>بدون هزینه پنهان — همه امکانات در یک لایسنس</p>
+    </div>
+    <div class="price-card reveal">
+      <div class="plabel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        لایسنس سالانه
+      </div>
+      <div class="amount">۳٬۰۰۰٬۰۰۰</div>
+      <div class="unit">تومان</div>
+      <div class="period">لایسنس یک ساله — آپدیت رایگان در طول دوره</div>
+      <div class="price-feats">
+        <div class="price-feat">دسترسی کامل به تمام ماژول‌ها</div>
+        <div class="price-feat">پشتیبانی یک ساله رایگان</div>
+        <div class="price-feat">آپدیت‌های دوره‌ای بدون هزینه</div>
+        <div class="price-feat">تقویم شمسی کاملاً فارسی</div>
+        <div class="price-feat">تحویل آنی پس از پرداخت</div>
+      </div>
+      <button class="btn btn-gold" style="width:100%;font-size:1.05rem;padding:1rem" onclick="addToCart()">افزودن به سبد خرید</button>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:1rem">پس از خرید، اطلاعات لایسنس بلافاصله برایتان ارسال می‌شود.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW ===== -->
+<section id="how">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow"><span class="dot"></span>روش خرید</div>
+      <h2>در <span class="g">سه قدم</span> تحویل بگیر</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="n">۰۱</div>
+        <h4>افزودن به سبد</h4>
+        <p>لایسنس سالانه فتوپنل رو به سبد خریدت اضافه کن.</p>
+      </div>
+      <div class="step reveal">
+        <div class="n">۰۲</div>
+        <h4>پرداخت امن</h4>
+        <p>از طریق درگاه بانکی معتبر پرداخت انجام بده.</p>
+      </div>
+      <div class="step reveal">
+        <div class="n">۰۳</div>
+        <h4>دریافت لایسنس</h4>
+        <p>بلافاصله اطلاعات لایسنس برایت ارسال و ایمیل می‌شود.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BOTTOM CTA ===== -->
+<section class="bottom-cta">
+  <div class="wrap">
+    <div class="bigcta reveal">
+      <h2>آماده‌ای آتلیه‌ات رو <span class="g">متحول کنی؟</span></h2>
+      <p>همین الان فتوپنل رو تهیه کن و از سردرگمی کاغذ و اکسل خلاص شو.</p>
+      <div class="cta-btns">
+        <button class="btn btn-gold" onclick="addToCart()">خرید لایسنس — ۳٬۰۰۰٬۰۰۰ تومان</button>
+        <a href="index.html" class="btn btn-ghost">بازگشت به فروشگاه</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fbottom">
+      <span>© ۱۴۰۴ رز دیجیتال — تمام حقوق محفوظ است.</span>
+      <span>www.rosedigital.ir</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Cart -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="dhead"><h3>سبد خرید</h3><button class="iconbtn" id="closeCart">✕</button></div>
+  <div class="ditems" id="ditems"><p class="empty">سبد خرید شما خالی است.</p></div>
+  <div class="dfoot">
+    <div class="trow"><span>جمع کل:</span><span class="tt" id="cartTotal">۰ تومان</span></div>
+    <button class="btn btn-gold" id="checkoutBtn" style="width:100%">تکمیل خرید و پرداخت</button>
+  </div>
+</aside>
+
+<!-- Checkout Modal -->
+<div class="modal" id="checkoutModal">
+  <div class="box">
+    <h3>تکمیل سفارش</h3>
+    <p class="sub">برای ارسال لایسنس، اطلاعات زیر را وارد کنید.</p>
+    <div class="field"><label>نام و نام خانوادگی</label><input id="ckName" placeholder="مثلاً علی رضایی" /></div>
+    <div class="field"><label>ایمیل</label><input id="ckEmail" type="email" placeholder="you@example.com" /></div>
+    <div class="field"><label>شماره موبایل</label><input id="ckPhone" inputmode="tel" placeholder="۰۹۱۲۳۴۵۶۷۸۹" /></div>
+    <button class="btn btn-gold" id="payBtn" style="width:100%">پرداخت <span id="payAmount"></span></button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<canvas id="fx"></canvas>
+
+<script>
+const fa = n => n.toLocaleString('fa-IR');
+const money = n => fa(n) + ' تومان';
+const $ = s => document.querySelector(s);
+
+/* cart */
+let cart = [];
+const overlay=$('#overlay'),drawer=$('#drawer');
+function openCart(){drawer.classList.add('on');overlay.classList.add('on')}
+function closeCart(){drawer.classList.remove('on');overlay.classList.remove('on')}
+$('#cartBtn').onclick=openCart;$('#closeCart').onclick=closeCart;overlay.onclick=closeCart;
+
+function addToCart(){
+  cart.push({id:'fotopanel',name:'فتوپنل — لایسنس سالانه',price:3000000,meta:'نرم‌افزار اتوماسیون عکاسی',uid:Date.now()});
+  renderCart();pulseCount();toast('فتوپنل به سبد اضافه شد');openCart();
+}
+function removeItem(uid){cart=cart.filter(i=>i.uid!==uid);renderCart()}
+function cartTotal(){return cart.reduce((s,i)=>s+i.price,0)}
+function pulseCount(){const c=$('#cartCount');c.textContent=fa(cart.length);c.classList.toggle('on',cart.length>0);c.style.transform='scale(1.4)';setTimeout(()=>c.style.transform='',180)}
+function renderCart(){
+  const box=$('#ditems');
+  $('#cartCount').textContent=fa(cart.length);$('#cartCount').classList.toggle('on',cart.length>0);
+  $('#cartTotal').textContent=money(cartTotal());
+  if(!cart.length){box.innerHTML='<p class="empty">سبد خرید شما خالی است.</p>';return}
+  box.innerHTML='';
+  cart.forEach(i=>{
+    const el=document.createElement('div');el.className='ci';
+    el.innerHTML=`<div class="ico"><svg width="22" height="22" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" rx="46" fill="#C9A84C"/><rect x="36" y="78" width="128" height="88" rx="14" fill="white" opacity="0.95"/><circle cx="100" cy="122" r="30" fill="#C9A84C"/><circle cx="100" cy="122" r="20" fill="white" opacity="0.3"/><circle cx="100" cy="122" r="12" fill="white" opacity="0.9"/><rect x="63" y="58" width="34" height="24" rx="7" fill="white" opacity="0.95"/></svg></div>
+      <div class="info"><b>${i.name}</b><span>${i.meta}</span><div class="p">${money(i.price)}</div></div>
+      <button class="rm">✕</button>`;
+    el.querySelector('.rm').onclick=()=>removeItem(i.uid);
+    box.appendChild(el);
+  });
+}
+
+/* checkout */
+const checkoutModal=$('#checkoutModal');
+$('#checkoutBtn').onclick=()=>{if(!cart.length){toast('سبد خرید خالی است');return}$('#payAmount').textContent='('+money(cartTotal())+')';closeCart();checkoutModal.classList.add('on')};
+checkoutModal.onclick=e=>{if(e.target===checkoutModal)checkoutModal.classList.remove('on')};
+$('#payBtn').onclick=()=>{
+  const name=$('#ckName').value.trim(),email=$('#ckEmail').value.trim();
+  if(!name||!email){toast('لطفاً نام و ایمیل را کامل کنید');return}
+  if(!cart.length){toast('سبد خرید خالی است');return}
+  const btn=$('#payBtn');btn.textContent='در حال انتقال...';btn.disabled=true;
+  fetch('https://api.payping.ir/v2/pay',{method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer FD1286AB9D9B195F5B55F2DAED2E2D0CC0CCD723EE2E59D12D8708D7F39D848D-1'},
+    body:JSON.stringify({amount:Math.round(cartTotal()/10),returnUrl:'https://rosedigital.ir/fotopanel.html',
+      description:'خرید فتوپنل — لایسنس سالانه',payerName:name,payerEmail:email,clientRefId:Date.now().toString()})
+  }).then(r=>r.json()).then(d=>{
+    if(d&&d.code)window.location.href='https://api.payping.ir/v2/pay/gotoipg/'+d.code;
+    else{toast('خطا در اتصال به درگاه');btn.textContent='پرداخت';btn.disabled=false}
+  }).catch(()=>{toast('خطا در اتصال');btn.textContent='پرداخت';btn.disabled=false});
+};
+
+/* toast */
+let tt;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
+
+/* reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* canvas */
+const cv=$('#fx'),ctx=cv.getContext('2d');
+let W,H,parts;
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}resize();addEventListener('resize',resize);
+const pal=['rgba(201,168,76,','rgba(139,47,201,','rgba(37,99,235,'];
+function init(){parts=[...Array(50)].map(()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*2+1,c:pal[Math.floor(Math.random()*3)]}))}
+init();addEventListener('resize',init);
+let t=0;
+function loop(){
+  ctx.clearRect(0,0,W,H);t+=.004;
+  for(let i=0;i<3;i++){const gx=W*(.3+.4*Math.sin(t+i*2)),gy=H*(.35+.3*Math.cos(t*1.3+i));
+    const g=ctx.createRadialGradient(gx,gy,0,gx,gy,Math.max(W,H)*.32);
+    g.addColorStop(0,pal[i]+'0.09)');g.addColorStop(1,pal[i]+'0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
+  parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fillStyle=p.c+'0.5)';ctx.fill();});
+  requestAnimationFrame(loop);
+}
+loop();
+
+/* loader */
+addEventListener('load',()=>setTimeout(()=>$('#loader').classList.add('hide'),600));
+setTimeout(()=>$('#loader').classList.add('hide'),2200);
+</script>
+</body>
+</html>
