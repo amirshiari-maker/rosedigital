@@ -766,16 +766,6 @@ const money = n => fa(n) + ' تومان';
 const $ = s => document.querySelector(s);
 
 /* ---------- data (پیش‌فرض؛ پنل مدیریت می‌تواند بازنویسی کند) ---------- */
-const DEFAULT_PRODUCTS = [
-  {id:'canva', icon:'assets/canva-pro.png', name:'Canva Pro', badge:'محبوب', price:1500000, old:2500000, desc:'دسترسی کامل به ابزارهای طراحی حرفه‌ای با تمام امکانات پرمیوم.', feats:['اکانت اورجینال و معتبر','دسترسی کامل به امکانات Pro','تحویل آنی']},
-  {id:'chatgpt', icon:'assets/chatgpt.png', name:'ChatGPT Plus', badge:'پرفروش', price:2000000, old:3500000, desc:'دسترسی به GPT-4 و امکانات پیشرفته هوش مصنوعی بدون محدودیت.', feats:['GPT-4 بدون محدودیت','تولید تصویر DALL-E','تحویل آنی']},
-  {id:'netflix', icon:'assets/netflix.png', name:'Netflix Premium', price:1200000, old:2000000, desc:'اشتراک نتفلیکس با کیفیت Ultra HD و امکان استفاده همزمان.', feats:['کیفیت Ultra HD','چند صفحه همزمان','تحویل آنی']},
-  {id:'spotify', icon:'assets/spotify.png', name:'Spotify Premium', price:800000, old:1500000, desc:'موسیقی بی‌محدود بدون تبلیغات با کیفیت صدای بالا.', feats:['بدون تبلیغات','دانلود آفلاین','کیفیت صدای بالا']},
-  {id:'youtube', icon:'assets/youtube-premium8.png', name:'YouTube Premium', price:900000, old:1600000, desc:'تماشای ویدیو بدون تبلیغات و دانلود آفلاین از یوتیوب.', feats:['بدون تبلیغات','دانلود آفلاین','YouTube Music رایگان']},
-];
-
-const DEFAULT_SUBS = [];
-
 const DEFAULT_NEWS = [
   {cat:'ویندوز', icon:'🪟', title:'آپدیت بزرگ ویندوز ۱۱ با قابلیت‌های هوش مصنوعی منتشر شد', excerpt:'مایکروسافت در جدیدترین به‌روزرسانی، ابزارهای مبتنی بر هوش مصنوعی را به‌صورت پیش‌فرض فعال کرد.', date:'۲ روز پیش', read:'۳ دقیقه'},
   {cat:'هوش مصنوعی', icon:'🤖', title:'مدل‌های جدید زبانی، سرعت پاسخ‌دهی را دو برابر کردند', excerpt:'نسل تازه دستیارهای هوشمند با بهینه‌سازی پردازش، تجربه سریع‌تری ارائه می‌دهند.', date:'۴ روز پیش', read:'۴ دقیقه'},
@@ -786,7 +776,7 @@ const DEFAULT_NEWS = [
 ];
 
 /* ---------- live content: content.json > localStorage > defaults ---------- */
-let products = DEFAULT_PRODUCTS, subs = DEFAULT_SUBS, allNews = DEFAULT_NEWS;
+let allNews = DEFAULT_NEWS;
 
 async function loadContent(){
   let d = null;
@@ -796,58 +786,11 @@ async function loadContent(){
     if(res.ok) d = await res.json();
   }catch(e){ /* فایل وجود ندارد یا لوکال اجرا می‌شود؛ از پیش‌فرض استفاده می‌کنیم */ }
   if(d){
-    if(Array.isArray(d.products)) products = d.products;
-    if(Array.isArray(d.subs))     subs     = d.subs;
     if(Array.isArray(d.news))     allNews  = d.news;
   }
 }
 
-/* ---------- render products ---------- */
-function renderProducts(){
-const pg = $('#productGrid'); pg.innerHTML='';
-products.forEach(p=>{
-  const el = document.createElement('div');
-  el.className='card reveal';
-  el.innerHTML = `
-    ${p.badge?`<span class="badge">${p.badge}</span>`:''}
-    <div class="logo-box"><img src="${p.icon}" alt="${p.name}" style="width:64px;height:64px;object-fit:contain;border-radius:12px"></div>
-    <h3>${p.name}</h3>
-    <p class="desc">${p.desc}</p>
-    <ul>${p.feats.map(f=>`<li>${f}</li>`).join('')}</ul>
-    <div class="priceline"><span class="price grad-text">${fa(p.price)}</span><span class="unit">تومان ${p.unit||''}</span>${p.old?`<span class="old">${fa(p.old)}</span>`:''}</div>
-    <button class="btn btn-primary add">افزودن به سبد</button>`;
-  el.querySelector('.add').onclick = ()=>addToCart({id:p.id,name:p.name,icon:p.icon,price:p.price,meta:'اشتراک دیجیتال'});
-  pg.appendChild(el);
-  io.observe(el);
-});
-}
 
-/* ---------- render subs ---------- */
-const sg = $('#subGrid');
-let curDur = 1;
-const durLabel = {1:'۱ ماهه',3:'۳ ماهه',12:'۱۲ ماهه'};
-const durMult  = {1:1,3:2.7,12:9.5}; // discounted multipliers
-function renderSubs(){
-  sg.innerHTML='';
-  subs.forEach(s=>{
-    const price = Math.round(s.base*durMult[curDur]/1000)*1000;
-    const el = document.createElement('div');
-    el.className='card reveal in';
-    el.innerHTML = `
-      <div class="logo-box">${s.icon}</div>
-      <h3>${s.name}</h3>
-      <p class="desc">${s.desc}</p>
-      <div class="priceline"><span class="price grad-text">${fa(price)}</span><span class="unit">تومان / ${durLabel[curDur]}</span></div>
-      <button class="btn btn-primary add">افزودن به سبد</button>`;
-    el.querySelector('.add').onclick=()=>addToCart({id:s.id+curDur,name:s.name,icon:s.icon,price,meta:'اشتراک '+durLabel[curDur]});
-    sg.appendChild(el);
-  });
-}
-$('#durToggle').addEventListener('click',e=>{
-  const b=e.target.closest('button'); if(!b)return;
-  [...e.currentTarget.children].forEach(x=>x.classList.remove('active'));
-  b.classList.add('active'); curDur=+b.dataset.dur; renderSubs();
-});
 
 /* ---------- render news ---------- */
 const ng=$('#newsGrid'); let newsShown=0;
@@ -979,8 +922,8 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 /* ---------- bootstrap: load dynamic content then render ---------- */
 (async()=>{
   await loadContent();
-  renderProducts();
-  renderSubs();
+
+
   renderNews(3);
 })();
 
