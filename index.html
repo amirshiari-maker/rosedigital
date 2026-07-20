@@ -178,6 +178,10 @@ header{position:sticky;top:0;z-index:90;transition:padding .25s ease}
 .cart-btn:hover{border-color:rgba(236,30,121,.5);box-shadow:0 0 24px -6px rgba(236,30,121,.5)}
 .cart-btn .count{position:absolute;top:-8px;left:-8px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--grad);color:#fff;font-size:.72rem;font-weight:700;display:grid;place-items:center;transform:scale(0);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
 .cart-btn .count.on{transform:scale(1)}
+.btn-login{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:11px;
+  background:rgba(236,30,121,.1);border:1px solid rgba(236,30,121,.25);color:var(--rose);
+  font-weight:700;font-size:.88rem;transition:.2s;white-space:nowrap}
+.btn-login:hover{background:rgba(236,30,121,.18);border-color:var(--rose)}
 .burger{display:none;background:none;border:1px solid var(--line);border-radius:10px;width:42px;height:42px;color:var(--text);font-size:1.2rem;cursor:pointer}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-family:inherit;font-weight:700;cursor:pointer;border:none;border-radius:13px;padding:.85rem 1.4rem;font-size:.98rem;transition:transform .15s ease,box-shadow .25s ease,filter .2s;white-space:nowrap}
@@ -402,6 +406,10 @@ footer{border-top:1px solid var(--line);padding:3rem 0 2rem;margin-top:3rem}
     </nav>
     <div class="actions">
       <button class="cart-btn" id="cartBtn">🛒 سبد خرید<span class="count" id="cartCount">0</span></button>
+      <a href="https://my.rosedigital.ir" class="btn-login" id="loginBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        ورود / ثبت‌نام
+      </a>
       <button class="burger" id="burger" aria-label="منو">☰</button>
     </div>
   </div>
@@ -732,13 +740,41 @@ footer{border-top:1px solid var(--line);padding:3rem 0 2rem;margin-top:3rem}
 <!-- Checkout modal -->
 <div class="modal" id="checkoutModal">
   <div class="box">
-    <h3>تکمیل سفارش</h3>
-    <p class="sub">برای ارسال کلید و لینک دانلود، اطلاعات زیر را وارد کنید.</p>
-    <div class="field"><label>نام و نام خانوادگی</label><input id="ckName" placeholder="مثلاً مریم رضایی" /></div>
-    <div class="field"><label>ایمیل</label><input id="ckEmail" type="email" placeholder="you@example.com" /></div>
-    <div class="field"><label>شماره موبایل</label><input id="ckPhone" inputmode="tel" placeholder="۰۹۱۲۳۴۵۶۷۸۹" /></div>
-    <button class="btn btn-primary" id="payBtn" style="width:100%">پرداخت <span id="payAmount"></span></button>
-    <p class="expiry" style="margin-top:1rem">با کلیک روی پرداخت به درگاه بانکی منتقل می‌شوید (نمونه نمایشی).</p>
+    <!-- step 1: phone -->
+    <div id="ckStepPhone">
+      <h3>تکمیل خرید</h3>
+      <p class="sub">شماره موبایل خود را وارد کنید تا کد تأیید ارسال شود.</p>
+      <div class="field"><label>شماره موبایل</label><input id="ckPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="۰۹۱۲۳۴۵۶۷۸۹" /></div>
+      <button class="btn btn-primary" id="ckSendOtpBtn" onclick="ckSendOtp()" style="width:100%">ارسال کد تأیید</button>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem;text-align:center">با ورود، حساب کاربری شما ساخته می‌شود.</p>
+    </div>
+    <!-- step 2: otp -->
+    <div id="ckStepOtp" style="display:none">
+      <h3>کد تأیید</h3>
+      <p class="sub" id="ckOtpSub">کد ارسال شده را وارد کنید</p>
+      <div style="display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem;direction:ltr">
+        <input type="tel" inputmode="numeric" maxlength="1" class="ck-otp-cell" style="width:46px;height:52px;text-align:center;font-size:1.3rem;font-weight:700;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;outline:none;transition:.2s"/>
+        <input type="tel" inputmode="numeric" maxlength="1" class="ck-otp-cell" style="width:46px;height:52px;text-align:center;font-size:1.3rem;font-weight:700;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;outline:none;transition:.2s"/>
+        <input type="tel" inputmode="numeric" maxlength="1" class="ck-otp-cell" style="width:46px;height:52px;text-align:center;font-size:1.3rem;font-weight:700;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;outline:none;transition:.2s"/>
+        <input type="tel" inputmode="numeric" maxlength="1" class="ck-otp-cell" style="width:46px;height:52px;text-align:center;font-size:1.3rem;font-weight:700;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;outline:none;transition:.2s"/>
+        <input type="tel" inputmode="numeric" maxlength="1" class="ck-otp-cell" style="width:46px;height:52px;text-align:center;font-size:1.3rem;font-weight:700;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;outline:none;transition:.2s"/>
+        <input type="tel" inputmode="numeric" maxlength="1" class="ck-otp-cell" style="width:46px;height:52px;text-align:center;font-size:1.3rem;font-weight:700;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;outline:none;transition:.2s"/>
+      </div>
+      <button class="btn btn-primary" id="ckVerifyBtn" onclick="ckVerifyOtp()" style="width:100%">تأیید و پرداخت</button>
+      <div style="display:flex;justify-content:center;gap:.5rem;margin-top:.8rem;font-size:.84rem">
+        <button id="ckResendBtn" onclick="ckResendOtp()" disabled style="background:none;border:none;color:var(--rose);font-family:inherit;font-weight:600;cursor:pointer">ارسال مجدد</button>
+        <span id="ckCountdown" style="color:var(--muted)"></span>
+      </div>
+      <button onclick="ckBackToPhone()" style="background:none;border:none;color:var(--muted);font-family:inherit;font-size:.85rem;cursor:pointer;margin-top:.5rem;width:100%">← تغییر شماره</button>
+    </div>
+    <!-- step 3: payment -->
+    <div id="ckStepPay" style="display:none">
+      <h3>پرداخت</h3>
+      <p class="sub" id="ckPaySub">در حال انتقال به درگاه...</p>
+      <div style="text-align:center;padding:1.5rem 0">
+        <div style="width:40px;height:40px;border:3px solid rgba(236,30,121,.2);border-top-color:#ec1e79;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -849,51 +885,88 @@ function renderCart(){
 const checkoutModal=$('#checkoutModal'),successModal=$('#successModal');
 function openModal(m){m.classList.add('on')}
 function closeModal(m){m.classList.remove('on')}
+
+const PANEL='https://my.rosedigital.ir';
+let ckPhone='',ckCountdownTimer=null;
+
+function showCkStep(step){
+  ['Phone','Otp','Pay'].forEach(s=>$('ckStep'+s).style.display=s.toLowerCase()===step?'block':'none');
+}
+
+document.querySelectorAll('.ck-otp-cell').forEach((inp,i,arr)=>{
+  inp.addEventListener('input',e=>{
+    const v=e.target.value.replace(/\D/g,'');
+    e.target.value=v?v[v.length-1]:'';
+    if(v&&i<arr.length-1)arr[i+1].focus();
+    if([...arr].map(c=>c.value).join('').length===6)ckVerifyOtp();
+  });
+  inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!inp.value&&i>0)arr[i-1].focus()});
+  inp.addEventListener('paste',e=>{
+    const p=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'');
+    if(p.length===6){arr.forEach((c,j)=>c.value=p[j]||'');arr[5].focus();ckVerifyOtp();}
+    e.preventDefault();
+  });
+});
+
+function ckStartCountdown(sec){
+  clearInterval(ckCountdownTimer);$('#ckResendBtn').disabled=true;let s=sec;
+  function tick(){$('#ckCountdown').textContent=`(${fa(s)} ثانیه)`;if(--s<0){clearInterval(ckCountdownTimer);$('#ckResendBtn').disabled=false;$('#ckCountdown').textContent='';}}
+  tick();ckCountdownTimer=setInterval(tick,1000);
+}
+
+async function ckSendOtp(){
+  const phone=$('#ckPhone').value.trim().replace(/\D/g,'');
+  if(!/^09\d{9}$/.test(phone)){toast('شماره موبایل نامعتبر است');return;}
+  ckPhone=phone;
+  const btn=$('#ckSendOtpBtn');btn.disabled=true;btn.textContent='در حال ارسال...';
+  try{
+    const r=await fetch(PANEL+'/api/auth/otp/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone}),credentials:'include'});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'خطا');
+    showCkStep('otp');
+    $('#ckOtpSub').textContent='کد به '+phone+' ارسال شد';
+    document.querySelectorAll('.ck-otp-cell').forEach(c=>c.value='');
+    document.querySelectorAll('.ck-otp-cell')[0].focus();
+    ckStartCountdown(120);
+  }catch(e){toast(e.message);}
+  btn.disabled=false;btn.textContent='ارسال کد تأیید';
+}
+
+async function ckResendOtp(){
+  try{
+    await fetch(PANEL+'/api/auth/otp/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:ckPhone}),credentials:'include'});
+    toast('کد مجدداً ارسال شد');ckStartCountdown(120);
+    document.querySelectorAll('.ck-otp-cell').forEach(c=>c.value='');
+    document.querySelectorAll('.ck-otp-cell')[0].focus();
+  }catch(e){toast('خطا در ارسال کد');}
+}
+
+function ckBackToPhone(){showCkStep('phone');clearInterval(ckCountdownTimer);}
+
+async function ckVerifyOtp(){
+  const code=[...document.querySelectorAll('.ck-otp-cell')].map(c=>c.value).join('');
+  if(code.length!==6){toast('کد ۶ رقمی را کامل وارد کنید');return;}
+  const btn=$('#ckVerifyBtn');btn.disabled=true;btn.textContent='در حال تأیید...';
+  try{
+    const r=await fetch(PANEL+'/api/auth/otp/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:ckPhone,code}),credentials:'include'});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'کد نامعتبر است');
+    showCkStep('pay');
+    const pr=await fetch(PANEL+'/api/payment/create',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({productId:'fotopanel_yearly'})});
+    const pd=await pr.json();
+    if(pd.url){setTimeout(()=>window.location.href=pd.url,600);}
+    else throw new Error(pd.error||'خطا در درگاه');
+  }catch(e){toast(e.message);btn.disabled=false;btn.textContent='تأیید و پرداخت';showCkStep('otp');}
+}
+
 $('#checkoutBtn').onclick=()=>{
   if(!cart.length){toast('سبد خرید خالی است');return}
-  $('#payAmount').textContent='('+money(cartTotal())+')';
-  closeCart(); openModal(checkoutModal);
+  closeCart(); openModal(checkoutModal); showCkStep('phone');
 };
 checkoutModal.onclick=e=>{if(e.target===checkoutModal)closeModal(checkoutModal)};
 successModal.onclick=e=>{if(e.target===successModal)closeModal(successModal)};
 
-$('#payBtn').onclick=()=>{
-  const name=$('#ckName').value.trim(),email=$('#ckEmail').value.trim();
-  if(!name||!email){toast('لطفاً نام و ایمیل را کامل کنید');return;}
-  if(!cart.length){toast('سبد خرید خالی است');return;}
-  const btn=$('#payBtn');
-  btn.textContent='در حال انتقال به درگاه...';btn.disabled=true;
-  const total=cartTotal();
-  const items=cart.map(i=>i.name).join(', ');
-  fetch('https://api.payping.ir/v2/pay',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'Authorization':'Bearer FD1286AB9D9B195F5B55F2DAED2E2D0CC0CCD723EE2E59D12D8708D7F39D848D-1'
-    },
-    body:JSON.stringify({
-      amount:Math.round(total/10),
-      returnUrl:'https://rosedigital.ir',
-      description:'خرید اشتراک دیجیتال: '+items,
-      payerName:name,
-      payerEmail:email,
-      clientRefId:Date.now().toString()
-    })
-  })
-  .then(r=>r.json())
-  .then(d=>{
-    if(d&&d.code){
-      window.location.href='https://api.payping.ir/v2/pay/gotoipg/'+d.code;
-    } else {
-      toast('خطا در اتصال به درگاه');
-      btn.textContent='پرداخت';btn.disabled=false;
-    }
-  })
-  .catch(()=>{
-    toast('خطا در اتصال به سرور');
-    btn.textContent='پرداخت';btn.disabled=false;
-  });
-};
+
 $('#copyLink').onclick=()=>{navigator.clipboard?.writeText($('#dlLink').textContent);$('#copyLink').textContent='کپی شد ✓';setTimeout(()=>$('#copyLink').textContent='کپی',1600)};
 $('#doneBtn').onclick=()=>closeModal(successModal);
 
